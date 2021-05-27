@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Gantt Chart";
+}
+<br />
+<h2>@ViewBag.Title View</h2>
+<img src="~/Assets/Gantt.jpg" alt="Gantt chart" style="width:75%;height:75%;">
+<br />
+<a href="javascript:history.back()">Go Back</a>
+
+@* This would be the start of the Gantt chart code using Telerik
+    https://demos.telerik.com/aspnet-mvc/gantt/basic-usage*@
+
+@*@using Kendo.Mvc.Examples.Models.Gantt;
+
+    @(Html.Kendo().Gantt<TaskViewModel, DependencyViewModel>()
+        .Name("gantt")
+        .Columns(columns =>
+        {
+            columns.Bound(x => x.Id).Title("Id").Width(50);
+            columns.Bound("title").Editable(true).Sortable(true);
+            columns.Group(g => {
+                g.Bound("start").Title("Start Time").Format("{0:MM/dd/yyyy}").Width(100).Editable(true).Sortable(true).MinScreenWidth(1440);
+                g.Bound("end").Title("End Time").Format("{0:MM/dd/yyyy}").Width(100).Editable(true).Sortable(true).MinScreenWidth(1440);
+            }).Title("Timings");
+        })
+        .Views(views =>
+        {
+            views.DayView();
+            views.WeekView(weekView => weekView.Selected(true));
+            views.MonthView();
+        })
+        .Height(700)
+        .ShowWorkHours(false)
+        .ShowWorkDays(false)
+        .Snap(false)
+        .DataSource(d => d
+            .Model(m =>
+            {
+                m.Id(f => f.TaskID);
+                m.ParentId(f => f.ParentID);
+                m.OrderId(f => f.OrderId);
+                m.Field(f => f.Expanded).DefaultValue(true);
+            })
+            .Read("Basic_Usage_Read_Tasks", "Gantt")
+            .Destroy("Basic_Usage_Destroy_Task", "Gantt")
+            .Update(u => u.Action("Basic_Usage_Update_Task", "Gantt").Data("onUpdateCreate"))
+            .Create(c => c.Action("Basic_Usage_Create_Task", "Gantt").Data("onUpdateCreate"))
+        )
+        .DependenciesDataSource(d => d
+            .Model(m =>
+            {
+                m.Id(x => x.DependencyID);
+                m.PredecessorId(x => x.PredecessorID);
+                m.SuccessorId(x => x.SuccessorID);
+                m.Type(x => x.Type);
+            })
+            .Read("Basic_Usage_Read_Dependencies", "Gantt")
+            .Create("Basic_Usage_Create_Dependency", "Gantt")
+            .Destroy("Basic_Usage_Destroy_Dependency", "Gantt")
+        )
+    )
+    <script>
+        // Send the dates for the newly creted/updated tasks as UTC strings
+        function onUpdateCreate(e) {
+            e.End = e.End.toISOString();
+            e.Start = e.Start.toISOString();
+        }
+    </script>*@

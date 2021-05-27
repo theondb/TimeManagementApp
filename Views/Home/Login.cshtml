@@ -1,0 +1,28 @@
+﻿@model TimeManagementApp.Models.ViewModel.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2 class="pt-3">Log in</h2>
+
+<div>
+    @using (Html.BeginForm("Login", "Home"))
+    {
+        <div style="color:red;">@Html.ValidationSummary()</div>
+        <div class="row">
+            <div class="col-lg-12">@ViewBag.Message</div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-lg-2">@Html.LabelFor(a => a.Email)</div>
+            <div class="col-lg-10">@Html.TextBoxFor(a => a.Email, new { @class = "form-control" })</div>
+        </div><br />
+        <div class="row">
+            <div class="col-lg-2">@Html.LabelFor(a => a.Password)</div>
+            <div class="col-lg-10">@Html.TextBoxFor(a => a.Password, new { @class = "form-control", type = "Password" })</div>
+        </div><br />
+        <input type="submit" value="Log in" class="btn btn-primary" />
+    }
+
+</div>

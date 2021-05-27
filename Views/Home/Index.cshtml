@@ -1,0 +1,154 @@
+﻿@model PagedList.IPagedList<TimeManagementApp.Models.Task>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@if (Request.IsAuthenticated)
+{
+    <br />
+    <span><b>Welcome @Html.Encode(User.Identity.Name) </b></span>
+    <p></p>
+    using (Html.BeginForm("Index", "", FormMethod.Get))
+    {
+        <p>
+            Search by Taskname or Priority: @Html.TextBox("SearchV", ViewBag.CurrentFilter as string)
+            <input type="submit" value="Search" />
+        </p>
+    }
+    <p></p>
+    <p>
+        @Html.ActionLink("Create New Task", "Create")
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Task Name", "Index", new { sortO = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                @Html.ActionLink("Start Date", "Index", new { sortO = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Deadline", "Index", new { sortO = ViewBag.DeadlineSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Priority
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            if (ViewBag.UserId == item.UserId)
+            {
+                if (item.EndTime < DateTime.Now.Date && item.EndTime != null)
+                {
+                    <tr>
+                        <td style="background-color: #ff726f">
+                            @Html.DisplayFor(modelItem => item.TaskName)
+                        </td>
+                        <td style="background-color: #ff726f">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="background-color: #ff726f">
+                            @Html.DisplayFor(modelItem => item.StartTime)
+                        </td>
+                        <td style="background-color: #ff726f">
+                            @Html.DisplayFor(modelItem => item.EndTime)
+                        </td>
+                        <td style="background-color: #ff726f">
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+                else if (item.EndTime <= DateTime.Today.AddDays(7) && item.EndTime > DateTime.Today && item.EndTime != null)
+                {
+                    <tr>
+                        <td style="background-color: #fdad5c">
+                            @Html.DisplayFor(modelItem => item.TaskName)
+                        </td>
+                        <td style="background-color: #fdad5c">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td style="background-color: #fdad5c">
+                            @Html.DisplayFor(modelItem => item.StartTime)
+                        </td>
+                        <td style="background-color: #fdad5c">
+                            @Html.DisplayFor(modelItem => item.EndTime)
+                        </td>
+                        <td style="background-color: #fdad5c">
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TaskName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EndTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Priority)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+    <p>@Html.ActionLink("Gantt Chart View", "Gantt", new object { }, new { @class = "pr-3" })   @Html.ActionLink("Calendar View", "Calendar")</p>
+
+    <p><b>Note:</b></p>
+    <p>Red field = Tasks that has expired or deadline is in the past. (Possible actions are to either remove or edit the tasks)</p>
+    <p>Orange field = Tasks that have 7 days remaining until the deadline.</p>
+    <p>Blank/White field = Tasks where the deadline is in the future beyond 7 days.</p>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortO = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+}
+else
+{
+
+    <h2 class="pt-3">Welcome to the Time Management tool</h2>
+    <p>This tool allows you to add as many tasks as you wish. To edit existing tasks, delete unwanted tasks and to view tasks in detail. The tool also allows multiple views that you can view your tasks by Table, Gantt chart, and Calendar.</p>
+    <p>Additional features consist of:</p>
+    <ul>
+        <li>Sorting the table of tasks by TaskName, Start Date, and Deadline.</li>
+        <li>Search facility is also included to specifically find a task or by priority.</li>
+        <li>Pagination to spread multiple tasks onto seperate pages when the total amount of tasks exceeds 5.</li>
+        <li>Colour coding task fields based on deadline.</li>
+        <li>Validation into form controls to ensure that you input the correct values into it.</li>
+    </ul>
+
+
+}
